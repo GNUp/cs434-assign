@@ -22,7 +22,21 @@ object RecFun extends RecFunInterface {
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean = {
+    def balance_aux(chars: List[Char], mem: Int): Boolean = {
+      if (chars.isEmpty) {
+        mem == 0
+      } else {
+        val mem_tmp = if (chars.head == '(') mem + 1
+                      else if (chars.head == ')') mem - 1
+                      else mem
+        if (mem_tmp < 0) false
+        else balance_aux(chars.tail, mem_tmp)
+      }
+    }
+
+    balance_aux(chars, 0)
+  }
 
   /**
    * Exercise 3
