@@ -1,7 +1,6 @@
 package funsets
 
 import org.junit._
-
 /**
  * This class is a test suite for the methods in object FunSets.
  *
@@ -38,6 +37,10 @@ class FunSetSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    val s4 = singletonSet(4)
+
+    val t1 = union(union(s1, s2), s3)
+    val t2 = union(union(s2, s3), s4)
   }
 
   /**
@@ -47,7 +50,7 @@ class FunSetSuite {
    * Once you finish your implementation of "singletonSet", remvoe the
    * @Ignore annotation.
    */
-  @Ignore("not ready yet") @Test def `singleton set one contains one`: Unit = {
+  @Test def `singleton set one contains one`: Unit = {
 
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -68,6 +71,54 @@ class FunSetSuite {
       assert(contains(s, 1), "Union 1")
       assert(contains(s, 2), "Union 2")
       assert(!contains(s, 3), "Union 3")
+    }
+  }
+
+    @Test def `intersect test`: Unit = {
+    new TestSets {
+      val s = intersect(t1, t2)
+      assert(contains(s, 2), "Intersect 1")
+      assert(contains(s, 3), "Intersect 2")
+      assert(!contains(s, 4), "Intersect 3")
+    }
+  }
+
+    @Test def `diff test`: Unit = {
+    new TestSets {
+      val s = diff(t1, t2)
+      assert(contains(s, 1), "diff 1")
+      assert(!contains(s, 2), "diff 2")
+    }
+  }
+  
+  @Test def `filter test`: Unit = {
+    new TestSets {
+      val s = filter(t1, x => x == 1)
+      assert(contains(s, 1), "filter 1")
+      assert(!contains(s, 2), "filter 2")
+    }
+  }
+
+  @Test def `forall test`: Unit = {
+    new TestSets {
+      assert(forall(t1, x => x < 10), "forall 1")
+      assert(!forall(t1, x => x < 3), "forall 2")
+    }
+  }
+
+  @Test def `exists test`: Unit = {
+    new TestSets {
+      assert(exists(t1, x => x < 10), "exists 1")
+      assert(exists(t1, x => x < 3), "exists 2")
+    }
+  }
+
+  @Test def `map test`: Unit = {
+    new TestSets {
+      val s = map(t1, x => 2*x)
+      assert(contains(s, 2), "map 1")
+      assert(contains(s, 4), "map 2")
+      assert(contains(s, 6), "map 3")
     }
   }
 
