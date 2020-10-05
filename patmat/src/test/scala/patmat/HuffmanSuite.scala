@@ -39,6 +39,7 @@ class HuffmanSuite {
 
   @Test def `decode and encode a very short text should be identity (10pts)`: Unit =
     new TestTrees {
+      assertEquals(encode(t1)("ab".toList), List(0, 1))
       assertEquals("ab".toList, decode(t1, encode(t1)("ab".toList)))
     }
 

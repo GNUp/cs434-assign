@@ -138,9 +138,9 @@ trait Huffman extends HuffmanInterface {
    * the resulting list of characters.
    */
   def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
-    def decode_aux(partial_tree: CodeTree, remain_bits: List[Bit]): List[Char] = tree match {
-      case Fork(left, right, chars, weight) => if (remain_bits.head == 0) decode_aux(left, remain_bits.tail) else decode_aux(right, remain_bits.tail)
-      case Leaf(char, weight) => if (remain_bits.isEmpty) List(char) else char :: decode_aux(tree, remain_bits)
+    def decode_aux(partial_tree: CodeTree, remain_bits: List[Bit]): List[Char] = partial_tree match {
+      case Fork(left, right, _, _) => if (remain_bits.head == 0) decode_aux(left, remain_bits.tail) else decode_aux(right, remain_bits.tail)
+      case Leaf(char, _) => if (remain_bits.isEmpty) List(char) else char :: decode_aux(tree, remain_bits)
     }
     decode_aux(tree, bits)
   }
