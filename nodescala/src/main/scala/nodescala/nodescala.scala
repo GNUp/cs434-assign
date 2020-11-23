@@ -34,8 +34,8 @@ trait NodeScala {
   private def respond(exchange: Exchange, token: CancellationToken, response: Response): Unit = {
     while(response.hasNext && token.nonCancelled) {
       exchange.write(response.next())
-      exchange.close()
     }
+    exchange.close()
   }
 
   /** A server:
@@ -52,16 +52,18 @@ trait NodeScala {
     val listener = createListener(relativePath)
     val listenerSubscription = listener.start()
     
-    Future.run() {ct => {
+    val requestSubscription = Future.run() {ct => {
       Future {
         while (ct.nonCancelled) {
           listener.nextRequest().onComplete({
             case Failure(exception) => throw exception
-            case Success(value) => Future {respond(value._2, ct, handler(value._1))}
+            case Success(value) => respond(value._2, ct, handler(value._1))
           })
         }
       }
     }}
+    
+    Subscription.apply(listenerSubscription, requestSubscription)
   }
 
 }
